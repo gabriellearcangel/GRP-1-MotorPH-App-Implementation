@@ -18,47 +18,6 @@ public class Deductions {
         return deductSSS + deductPagibig + deductPhilhealth + deductWithholdingTax;
     }
 
-    // Getters and setters (optional)
-    public int getDeductionID() {
-        return deductionID;
-    }
-
-    public void setDeductionID(int deductionID) {
-        this.deductionID = deductionID;
-    }
-
-    public double getDeductSSS() {
-        return deductSSS;
-    }
-
-    public void setDeductSSS(double deductSSS) {
-        this.deductSSS = deductSSS;
-    }
-
-    public double getDeductPagibig() {
-        return deductPagibig;
-    }
-
-    public void setDeductPagibig(double deductPagibig) {
-        this.deductPagibig = deductPagibig;
-    }
-
-    public double getDeductPhilhealth() {
-        return deductPhilhealth;
-    }
-
-    public void setDeductPhilhealth(double deductPhilhealth) {
-        this.deductPhilhealth = deductPhilhealth;
-    }
-
-    public double getDeductWithholdingTax() {
-        return deductWithholdingTax;
-    }
-
-    public void setDeductWithholdingTax(double deductWithholdingTax) {
-        this.deductWithholdingTax = deductWithholdingTax;
-    }
-
     public static void main(String[] args) {
       // Create employee
       Employee employee1 = new Employee(1, "10001", "Garcia", "Manuel III", LocalDate.of(1983, 10, 11),535.71, "Chief Executive Officer", "Regular");
