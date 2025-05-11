@@ -1,117 +1,60 @@
-import java.time.Duration;
+package com.mycompany.employee;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Attendance {
-   
-    private int attendanceID;
-    private String employeeNumber;
+    private int attendID;
     private LocalDate date;
     private LocalTime timeIn;
     private LocalTime timeOut;
-    private int lateMinutes; // Changed to private, calculated in isLate()
-
-    // Constructor
-    public Attendance(int attendanceID, String employeeNumber, LocalDate date, LocalTime timeIn, LocalTime timeOut) {
-        this.attendanceID = attendanceID;
-        this.employeeNumber = employeeNumber;
+    private int lateMinutes;
+    private LocalTime gracePeriod;
+    
+    public Attendance(int attendID, LocalDate date, LocalTime timeIn, LocalTime timeOut) {
+        this.attendID = attendID;
         this.date = date;
         this.timeIn = timeIn;
         this.timeOut = timeOut;
-        this.lateMinutes = calculateLateMinutes(); // Calculate late minutes in constructor
+        this.lateMinutes = 0;
     }
-
-    // Default constructor
-    public Attendance() {
-    }
-
-    //Getters and Setters
-    public int getAttendanceID() {
-        return attendanceID;
-    }
-
-    public void setAttendanceID(int attendanceID) {
-        this.attendanceID = attendanceID;
-    }
-
-    public String getEmployeeNumber() {
-        return employeeNumber;
-    }
-
-    public void setEmployeeNumber(String employeeNumber) {
-        this.employeeNumber = employeeNumber;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public LocalTime getTimeIn() {
-        return timeIn;
-    }
-
-    public void setTimeIn(LocalTime timeIn) {
-        this.timeIn = timeIn;
-        this.lateMinutes = calculateLateMinutes(); // Recalculate when timeIn changes
-    }
-
-    public LocalTime getTimeOut() {
-        return timeOut;
-    }
-
-    public void setTimeOut(LocalTime timeOut) {
-        this.timeOut = timeOut;
-    }
-
-    // Method to calculate hours worked
+    
     public double calculateHoursWorked() {
-        if (timeIn != null && timeOut != null) {
-            Duration duration = Duration.between(timeIn, timeOut);
-            return duration.toMinutes() / 60.0; // Convert minutes to hours
-        } else {
-            return 0.0; // Or throw an exception, depending on your needs
-        }
+        return timeOut.getHour() - timeIn.getHour() + (timeOut.getMinute() - timeIn.getMinute()) / 60.0;
     }
-
-    // Method to check if the employee is late
+    
     public boolean isLate() {
-        return this.lateMinutes > 0;
+        LocalTime gracePeriod = LocalTime.of(8,11);
+        
+        return timeIn.isAfter(gracePeriod);
     }
-
-    // Method to calculate late minutes
-    private int calculateLateMinutes() {
-        LocalTime officeStartTime = LocalTime.of(8, 0); // Example: Office start time is 8:00 AM
-        if (timeIn != null && timeIn.isAfter(officeStartTime)) {
-            Duration duration = Duration.between(officeStartTime, timeIn);
-            return (int) duration.toMinutes();
-        } else {
-            return 0;
-        }
-    }
-    //Getter for late minutes
+    
     public int getLateMinutes() {
+        if (isLate()) {
+            lateMinutes = (int) java.time.Duration.between(LocalTime.of(8,11), timeIn).toMinutes();
+        } else {
+        lateMinutes = 0;
+    } 
         return lateMinutes;
-    }
-
-     public void setLateMinutes(int lateMinutes) {
-        this.lateMinutes = lateMinutes;
-    }
-
-    @Override
-    public String toString() {
-        return "Attendance{" +
-                "attendanceID=" + attendanceID +
-                ", employeeNumber='" + employeeNumber + '\'' +
-                ", date=" + date +
-                ", timeIn=" + timeIn +
-                ", timeOut=" + timeOut +
-                ", lateMinutes=" + lateMinutes +
-                '}';
+}
+    
+    public static void main(String[] args) {
+        // Create employee
+        Employee employee1 = new Employee(1, "10001", "Garcia", "Manuel III", LocalDate.of(1983,10,11), 535.71, "Chief Executive Officer", "Regular");
+      
+        // Create attendance record
+        Attendance attendance1 = new Attendance(101, LocalDate.now(), LocalTime.of(9, 15), LocalTime.of(17,0));
+        
+        // Display details
+        System.out.println("Name: " + employee1.getFullName());
+        
+        //Attendance details
+        System.out.println("Hours Worked: " + attendance1.calculateHoursWorked());
+        
+        if (attendance1.isLate()) {
+            System.out.println("Late Minutes: " + attendance1.getLateMinutes());
+    } else {
+            System.out.println("On Time");
+        }
     }
 }
-
-
